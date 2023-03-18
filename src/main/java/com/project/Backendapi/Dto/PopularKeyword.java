@@ -1,4 +1,4 @@
-package com.project.Backendapi.Entity;
+package com.project.Backendapi.Dto;
 
 import lombok.Data;
 

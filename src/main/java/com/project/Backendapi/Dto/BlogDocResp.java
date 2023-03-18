@@ -1,11 +1,11 @@
-package com.project.Backendapi.Entity;
+package com.project.Backendapi.Dto;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class SearchingBlogDocResp {
+public class BlogDocResp {
     public String title;
     public String contents;
     public String url;
