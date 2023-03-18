@@ -5,14 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
-public class BlogParam {
+public class BlogParamDto {
 
     private String query;
     private String sort;
     private Integer page;
     private Integer size;
     @Builder
-    private BlogParam (String query, String sort, Integer page, Integer size) {
+    private BlogParamDto(String query, String sort, Integer page, Integer size) {
         this.query = query;
         this.sort = sort;
         this.page = page;

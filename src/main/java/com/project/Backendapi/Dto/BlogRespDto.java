@@ -1,7 +1,6 @@
 package com.project.Backendapi.Dto;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,14 +8,14 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class BlogResp {
+public class BlogRespDto {
     private Integer totalCount;
     private Integer pageableCount;
     private Boolean isEnd;
-    private List<BlogDocResp> documents;
+    private List<BlogDocRespDto> documents;
 
     @Builder
-    private BlogResp (Integer totalCount, Integer pageableCount, Boolean isEnd, List<BlogDocResp> documents) {
+    private BlogRespDto(Integer totalCount, Integer pageableCount, Boolean isEnd, List<BlogDocRespDto> documents) {
         this.totalCount = totalCount;
         this.pageableCount = pageableCount;
         this.isEnd = isEnd;

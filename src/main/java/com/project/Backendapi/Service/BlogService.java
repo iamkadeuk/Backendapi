@@ -1,10 +1,8 @@
 package com.project.Backendapi.Service;
 
-import com.project.Backendapi.Dto.BlogParam;
-import com.project.Backendapi.Dto.BlogResp;
+import com.project.Backendapi.Dto.BlogParamDto;
+import com.project.Backendapi.Dto.BlogRespDto;
 
-import java.util.HashMap;
-import java.util.List;
 public interface BlogService {
-    public BlogResp searchingBlogList (BlogParam blogParam);
+    public BlogRespDto searchingBlogList (BlogParamDto blogParamDto);
 }

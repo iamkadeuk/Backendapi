@@ -1,7 +1,7 @@
 package com.project.Backendapi.Common;
 
 
-import com.project.Backendapi.Dto.BlogParam;
+import com.project.Backendapi.Dto.BlogParamDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -19,9 +19,9 @@ public class KakaoRestapiHelper {
     private static final String API_SERVER_HOST = "https://dapi.kakao.com";
     private static final String SEARCH_PLACE_KEYWORD_PATH = "/v2/search/blog";
 
-    public ResponseEntity<Map> blog (BlogParam blogParam) throws Exception {
-        String queryString = "?query=" + URLEncoder.encode(blogParam.getQuery(), "UTF-8")
-                + "&sort=" + blogParam.getSort() + "&page=" + blogParam.getPage() + "&size=" + blogParam.getSize();
+    public ResponseEntity<Map> blog (BlogParamDto blogParamDto) throws Exception {
+        String queryString = "?query=" + URLEncoder.encode(blogParamDto.getQuery(), "UTF-8")
+                + "&sort=" + blogParamDto.getSort() + "&page=" + blogParamDto.getPage() + "&size=" + blogParamDto.getSize();
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
