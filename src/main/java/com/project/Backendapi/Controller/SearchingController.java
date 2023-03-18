@@ -4,6 +4,7 @@ import com.project.Backendapi.Dto.BlogParamDto;
 import com.project.Backendapi.Dto.PopularKeywordDto;
 import com.project.Backendapi.Dto.BlogRespDto;
 import com.project.Backendapi.Service.BlogService;
+import com.project.Backendapi.Service.KeywordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class SearchingController {
 
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private KeywordService keywordService;
 
     @GetMapping(value = "/blog")
     public ResponseEntity<BlogRespDto> getBlogList (
@@ -46,9 +49,13 @@ public class SearchingController {
     }
 
     @GetMapping(value = "/popular/keyword")
-    public List<PopularKeywordDto> getPopularKeywordList () {
-        List<PopularKeywordDto> result = new ArrayList<>();
+    public ResponseEntity<List<PopularKeywordDto>> getPopularKeywordList () {
+        List<PopularKeywordDto> popularKeywordDtoList = keywordService.popularKeywordList();
 
-        return result;
+        if (popularKeywordDtoList != null) {
+            return new ResponseEntity<>(popularKeywordDtoList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
