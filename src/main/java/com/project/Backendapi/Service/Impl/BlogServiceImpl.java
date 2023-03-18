@@ -4,6 +4,8 @@ import com.project.Backendapi.Common.KakaoRestapiHelper;
 import com.project.Backendapi.Dto.BlogDocRespDto;
 import com.project.Backendapi.Dto.BlogParamDto;
 import com.project.Backendapi.Dto.BlogRespDto;
+import com.project.Backendapi.Entity.UserKeyword;
+import com.project.Backendapi.Repository.UserKeywordRepository;
 import com.project.Backendapi.Service.BlogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private KakaoRestapiHelper kakaoRestapiHelper;
+    @Autowired
+    private UserKeywordRepository userKeywordRepository;
+
     public BlogRespDto searchingBlogList (BlogParamDto blogParamDto) {
         BlogRespDto result = new BlogRespDto();
         try {
@@ -30,6 +35,26 @@ public class BlogServiceImpl implements BlogService {
             log.debug(resultMap.toString());
 
             if (HttpStatus.OK == resultMap.getStatusCode()) {
+                // USER_KEYWORD 테이블에 저장
+                UserKeyword userKeyword = userKeywordRepository.findById(blogParamDto.getQuery()).orElse(null);
+                if (userKeyword != null) {
+                    // update
+                    userKeywordRepository.save(UserKeyword.builder()
+                            .keyword(blogParamDto.getQuery())
+                            .cnt(userKeyword.getCnt() + 1)
+                            .fstRegDtmd(userKeyword.getFstRegDtmd())
+                            .lastChgDtmd(LocalDateTime.now())
+                            .build());
+                } else {
+                    // insert
+                    userKeywordRepository.save(UserKeyword.builder()
+                            .keyword(blogParamDto.getQuery())
+                            .cnt(1)
+                            .fstRegDtmd(LocalDateTime.now())
+                            .lastChgDtmd(LocalDateTime.now())
+                            .build());
+                }
+
                 result = parsingKakaoBlogResult(resultMap);
             } else {
                 // 네이버 블로그 검색 구현
