@@ -1,13 +1,25 @@
 package com.project.Backendapi.Dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class BlogResp {
-    public Integer totalCount;
-    public Integer pageableCount;
-    public Boolean isEnd;
-    public List<BlogDocResp> documents;
+    private Integer totalCount;
+    private Integer pageableCount;
+    private Boolean isEnd;
+    private List<BlogDocResp> documents;
+
+    @Builder
+    private BlogResp (Integer totalCount, Integer pageableCount, Boolean isEnd, List<BlogDocResp> documents) {
+        this.totalCount = totalCount;
+        this.pageableCount = pageableCount;
+        this.isEnd = isEnd;
+        this.documents = documents;
+    }
 }

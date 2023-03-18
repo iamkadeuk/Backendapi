@@ -1,15 +1,30 @@
 package com.project.Backendapi.Dto;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+
+@Getter
+@NoArgsConstructor
 public class BlogDocResp {
-    public String title;
-    public String contents;
-    public String url;
-    public String blogname;
-    public String thumbnail;
-    public LocalDateTime datetime;
+    private String title;
+    private String contents;
+    private String url;
+    private String blogname;
+    private String thumbnail;
+    private LocalDateTime datetime;
+
+    @Builder
+    private BlogDocResp (String title, String contents, String url, String blogname, String thumbnail, LocalDateTime datetime) {
+        this.title = title;
+        this.contents = contents;
+        this.url = url;
+        this.blogname = blogname;
+        this.thumbnail = thumbnail;
+        this.datetime = datetime;
+    }
 }

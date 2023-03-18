@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URLEncoder;
+import java.util.Map;
 
 @Component
 public class KakaoRestapiHelper {
@@ -18,7 +19,7 @@ public class KakaoRestapiHelper {
     private static final String API_SERVER_HOST = "https://dapi.kakao.com";
     private static final String SEARCH_PLACE_KEYWORD_PATH = "/v2/search/blog";
 
-    public ResponseEntity<String> blog (BlogParam blogParam) throws Exception {
+    public ResponseEntity<Map> blog (BlogParam blogParam) throws Exception {
         String queryString = "?query=" + URLEncoder.encode(blogParam.getQuery(), "UTF-8")
                 + "&sort=" + blogParam.getSort() + "&page=" + blogParam.getPage() + "&size=" + blogParam.getSize();
         RestTemplate restTemplate = new RestTemplate();
@@ -30,7 +31,7 @@ public class KakaoRestapiHelper {
 
         URI url = URI.create(API_SERVER_HOST+SEARCH_PLACE_KEYWORD_PATH + queryString);
         RequestEntity<String> rq = new RequestEntity<>(headers, HttpMethod.GET, url);
-        ResponseEntity<String> re = restTemplate.exchange(rq, String.class);
+        ResponseEntity<Map> re = restTemplate.exchange(rq, Map.class);
 
         return re;
     }

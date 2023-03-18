@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BlogParam {
 
-    public String query;
-    public String sort;
-    public Integer page;
-    public Integer size;
+    private String query;
+    private String sort;
+    private Integer page;
+    private Integer size;
     @Builder
-    public BlogParam (String query, String sort, Integer page, Integer size) {
+    private BlogParam (String query, String sort, Integer page, Integer size) {
         this.query = query;
         this.sort = sort;
         this.page = page;

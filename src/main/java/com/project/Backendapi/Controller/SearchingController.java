@@ -5,12 +5,15 @@ import com.project.Backendapi.Dto.PopularKeyword;
 import com.project.Backendapi.Dto.BlogResp;
 import com.project.Backendapi.Service.BlogService;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -25,9 +28,9 @@ public class SearchingController {
 
         BlogParam blogParam = BlogParam.builder().query(query).sort(sort).page(page).size(size).build();
 
-        List<BlogResp> result = blogService.searchingBlogList(blogParam);
+        BlogResp result = blogService.searchingBlogList(blogParam);
 
-        return result;
+        return null;
     }
 
     @GetMapping(value = "/popular/keyword")
