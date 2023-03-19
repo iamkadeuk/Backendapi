@@ -1,7 +1,7 @@
 package com.project.Backendapi.Service.Impl;
 
 import com.project.Backendapi.Dto.PopularKeywordDto;
-import com.project.Backendapi.Entity.UserKeyword;
+import com.project.Backendapi.Entity.UserKeywordEntity;
 import com.project.Backendapi.Repository.UserKeywordRepository;
 import com.project.Backendapi.Service.KeywordService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +20,13 @@ public class KeywordServiceImpl implements KeywordService {
 
     public List<PopularKeywordDto> popularKeywordList () {
         List<PopularKeywordDto> popularKeywordDtoList = new ArrayList<>();
-        List<UserKeyword> userKeywordList = userKeywordRepository.findFirst10ByOrderByCntDescLastChgDtmdDesc();
+        List<UserKeywordEntity> userKeywordEntityList = userKeywordRepository.findFirst10ByOrderByCntDescLastChgDtmdDesc();
 
-        if (userKeywordList != null && userKeywordList.size() > 0) {
-            for (UserKeyword userKeyword: userKeywordList) {
+        if (userKeywordEntityList != null && userKeywordEntityList.size() > 0) {
+            for (UserKeywordEntity userKeywordEntity : userKeywordEntityList) {
                 popularKeywordDtoList.add(PopularKeywordDto.builder()
-                        .keyword(userKeyword.getKeyword())
-                        .count(userKeyword.getCnt())
+                        .keyword(userKeywordEntity.getKeyword())
+                        .count(userKeywordEntity.getCnt())
                         .build());
             }
         }

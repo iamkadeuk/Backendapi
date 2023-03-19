@@ -1,19 +1,17 @@
 package com.project.Backendapi.Entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @SuperBuilder
+@Getter
+@Setter
 @NoArgsConstructor
 @Table(name = "USER_KEYWORD")
-@Data
 @Entity
-public class UserKeyword {
+public class UserKeywordEntity extends BaseTimeEntity {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long seq;
@@ -21,8 +19,8 @@ public class UserKeyword {
     private String keyword;
     @Column(nullable = false)
     private Integer cnt;
-    @Column(nullable = false)
-    private LocalDateTime fstRegDtmd;
-    @Column(nullable = false)
-    private LocalDateTime lastChgDtmd;
+//    @Column(nullable = false)
+//    private LocalDateTime fstRegDtmd;
+//    @Column(nullable = false)
+//    private LocalDateTime lastChgDtmd;
 }
