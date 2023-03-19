@@ -5,6 +5,10 @@ import com.project.Backendapi.Dto.PopularKeywordDto;
 import com.project.Backendapi.Dto.BlogRespDto;
 import com.project.Backendapi.Service.BlogService;
 import com.project.Backendapi.Service.KeywordService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
+@Api(tags = "조회 API")
 @RestController
 @RequestMapping("/api/v1/searching")
 public class SearchingController {
@@ -27,11 +32,16 @@ public class SearchingController {
     private KeywordService keywordService;
 
     @GetMapping(value = "/blog")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "블로그 검색 성공"),
+//            @ApiResponse(code = 400, message = "잘못된 요청(필수 파라미터 확인)"),
+//            @ApiResponse(code = 500, message = "서버 내부 오류")
+//    })
     public ResponseEntity<BlogRespDto> getBlogList (
-            @RequestParam(value = "query", required = true) String query,
-            @RequestParam(value = "sort", required = false, defaultValue = "accuracy") String sort,
-            @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") Integer size
+            @ApiParam(value = "검색을 원하는 질의어(키워드)") @RequestParam(value = "query", required = true) String query,
+            @ApiParam(value = "결과 문서 정렬 방식") @RequestParam(value = "sort", required = false, defaultValue = "accuracy") String sort,
+            @ApiParam(value = "결과 페이지 번호") @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
+            @ApiParam(value = "한 페이지에 보여질 문서 수") @RequestParam(value = "size", required = false, defaultValue = "10") Integer size
     ) {
 
         if (StringUtils.isNotBlank(query)) {

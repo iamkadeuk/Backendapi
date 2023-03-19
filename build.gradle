@@ -39,8 +39,10 @@ jar {
 		attributes 'Main-Class': 'com.project.Backendapi.BackendapiApplication'
 	}
 	from {
-		configurations.compile.collect {
+		configurations.compileClasspath.collect {
 			it.isDirectory() ? it : zipTree(it)
 		}
 	}
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	enabled = false
 }
