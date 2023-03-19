@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
@@ -30,39 +31,45 @@ public class BlogServiceImpl implements BlogService {
 
     public BlogRespDto searchingBlogList (BlogParamDto blogParamDto) {
         BlogRespDto result = new BlogRespDto();
+
+        this.insertUpdateUserKeyword(blogParamDto.getQuery());
+
         try {
             ResponseEntity<Map> resultMap = kakaoRestapiHelper.blog(blogParamDto);
             log.debug(resultMap.toString());
 
             if (HttpStatus.OK == resultMap.getStatusCode()) {
-                // USER_KEYWORD 테이블에 저장
-                UserKeywordEntity userKeywordEntity = userKeywordRepository.findById(blogParamDto.getQuery()).orElse(null);
-                if (userKeywordEntity != null) {
-                    // update
-                    userKeywordEntity.setCnt(userKeywordEntity.getCnt() + 1);
-                    userKeywordRepository.save(userKeywordEntity);
-                } else {
-                    // insert
-                    userKeywordRepository.save(UserKeywordEntity.builder()
-                            .keyword(blogParamDto.getQuery())
-                            .cnt(1)
-                            .build());
-                }
 
-                result = parsingKakaoBlogResult(resultMap);
+                result = this.parsingKakaoBlogResult(resultMap);
+
             } else {
-                // 네이버 블로그 검색 구현
-                result = null;
+
+                //네이버 블로그 검색
+
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            result = null;
             log.error("searchingBlogList httpClientErrorException | HttpServerErrorException 발생={}", e.getStackTrace().toString());
         } catch (Exception e) {
-            result = null;
             log.error("searchingBlogList Exception 발생={}", e.toString());
         } finally {
             return result;
+        }
+    }
+
+    public void insertUpdateUserKeyword (String keyword) {
+        // USER_KEYWORD 테이블에 저장
+        UserKeywordEntity userKeywordEntity = userKeywordRepository.findById(keyword).orElse(null);
+        if (userKeywordEntity != null) {
+            // update
+            userKeywordEntity.setCnt(userKeywordEntity.getCnt() + 1);
+            userKeywordRepository.save(userKeywordEntity);
+        } else {
+            // insert
+            userKeywordRepository.save(UserKeywordEntity.builder()
+                    .keyword(keyword)
+                    .cnt(1)
+                    .build());
         }
     }
 
