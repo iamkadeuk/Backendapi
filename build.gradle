@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.project'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -32,4 +32,15 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'com.project.Backendapi.BackendapiApplication'
+	}
+	from {
+		configurations.compile.collect {
+			it.isDirectory() ? it : zipTree(it)
+		}
+	}
 }
