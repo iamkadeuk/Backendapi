@@ -16,9 +16,6 @@ import java.util.Set;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    // localhost:8088/v2/api-docs
-    // localhost:8088/swagger-ui/index.html/
-
     // Swagger Documentation
     private static final Contact DEFAULT_CONTACT = new Contact("허가득",
             "https://github.com/iamkadeuk", "iamkadeuk@icloud.com");

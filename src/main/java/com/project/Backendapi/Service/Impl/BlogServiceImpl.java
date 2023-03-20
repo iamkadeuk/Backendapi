@@ -2,9 +2,7 @@ package com.project.Backendapi.Service.Impl;
 
 import com.project.Backendapi.Common.KakaoRestapiHelper;
 import com.project.Backendapi.Common.NaverRestapiHelper;
-import com.project.Backendapi.Dto.BlogDocRespDto;
-import com.project.Backendapi.Dto.BlogParamDto;
-import com.project.Backendapi.Dto.BlogRespDto;
+import com.project.Backendapi.Dto.*;
 import com.project.Backendapi.Entity.UserKeywordEntity;
 import com.project.Backendapi.Repository.UserKeywordRepository;
 import com.project.Backendapi.Service.BlogService;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 
@@ -32,30 +29,38 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private UserKeywordRepository userKeywordRepository;
 
-    public Map<String, Object> searchingBlogList (BlogParamDto blogParamDto) {
-        BlogRespDto result = new BlogRespDto();
-        Map<String, Object> resultMap = new HashMap<>();
+    public Map<String, Map<String, Object>> searchingBlogList (BlogParamDto blogParamDto) {
+        KakaoBlogRespDto kakaoBlogRespDto = new KakaoBlogRespDto();
+        NaverBlogRespDto naverBlogRespDto = new NaverBlogRespDto();
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
+        Map<String, Object> subResultMap = new HashMap<>();
 
+        // 키워드 저장
         this.insertUpdateUserKeyword(blogParamDto.getQuery());
 
         try {
+            // 카카오 블로그 우선 검색
             ResponseEntity<Map> kakaoResultMap = kakaoRestapiHelper.blog(blogParamDto);
-            log.debug(kakaoResultMap.toString());
 
-            //if (HttpStatus.OK == kakaoResultMap.getStatusCode()) {
-            if (false) {
-                result = this.parsingKakaoBlogResult(kakaoResultMap);
-                resultMap.put(HttpStatus.OK.toString(), result);
+            // log.debug(kakaoResultMap.toString());
+
+            if (HttpStatus.OK == kakaoResultMap.getStatusCode()) {
+            //if (false) {
+                kakaoBlogRespDto = this.parsingKakaoBlogResult(kakaoResultMap);
+                subResultMap.put("KAKAO", kakaoBlogRespDto);
+                resultMap.put(HttpStatus.OK.toString(), subResultMap);
 
             } else {
 
-                //네이버 블로그 검색
+                // 네이버 블로그 검색
                 ResponseEntity<Map> naverResultMap = naverRestapiHelper.blog(blogParamDto);
-                log.debug(naverResultMap.toString());
+
+                // log.debug(naverResultMap.toString());
 
                 if (HttpStatus.OK == naverResultMap.getStatusCode()) {
-                    result = this.parsingNaverBlogResult(naverResultMap);
-                    resultMap.put(HttpStatus.OK.toString(), result);
+                    naverBlogRespDto = this.parsingNaverBlogResult(naverResultMap);
+                    subResultMap.put("NAVER", naverBlogRespDto);
+                    resultMap.put(HttpStatus.OK.toString(), subResultMap);
                 }
             }
 
@@ -86,28 +91,17 @@ public class BlogServiceImpl implements BlogService {
         }
     }
 
-    public BlogRespDto parsingKakaoBlogResult (ResponseEntity<Map> resultMap) {
-        BlogRespDto blogRespDto = new BlogRespDto();
-        List<BlogDocRespDto> blogDocRespDtoList = new ArrayList<>();
-        /*
-                resultMap
-                    status: 200
-                    headers
-                    body
-                        documents
-                            key
-                            value
-                        meta
-                            key
-                            value
-                */
-        HashMap<String, Object> metaMap = (HashMap<String, Object>) resultMap.getBody().get("meta");
+    public KakaoBlogRespDto parsingKakaoBlogResult (ResponseEntity<Map> resultMap) {
+        KakaoBlogRespDto kakaoBlogRespDto = new KakaoBlogRespDto();
+        List<KakaoBlogDocRespDto> kakaoBlogDocRespDtoList = new ArrayList<>();
 
+        HashMap<String, Object> metaMap = (HashMap<String, Object>) resultMap.getBody().get("meta");
         ArrayList<Map> documentsList = (ArrayList<Map>) resultMap.getBody().get("documents");
-        log.debug(documentsList.toString());
+
+        // log.debug(documentsList.toString());
 
         for (Map document: documentsList) {
-            blogDocRespDtoList.add(BlogDocRespDto.builder()
+            kakaoBlogDocRespDtoList.add(KakaoBlogDocRespDto.builder()
                     .title(document.get("title").toString())
                     .contents(document.get("contents").toString())
                     .url(document.get("url").toString())
@@ -118,59 +112,48 @@ public class BlogServiceImpl implements BlogService {
             );
         }
 
-        blogRespDto = BlogRespDto.builder()
+        kakaoBlogRespDto = KakaoBlogRespDto.builder()
                 .totalCount((Integer) metaMap.get("total_count"))
                 .pageableCount((Integer) metaMap.get("pageable_count"))
                 .isEnd((Boolean) metaMap.get("is_end"))
-                .documents(blogDocRespDtoList)
+                .documents(kakaoBlogDocRespDtoList)
                 .build();
 
-        log.debug(blogRespDto.toString());
+        // log.debug(kakaoBlogRespDto.toString());
 
-        return blogRespDto;
+        return kakaoBlogRespDto;
     }
 
-    public BlogRespDto parsingNaverBlogResult (ResponseEntity<Map> resultMap) {
-        BlogRespDto blogRespDto = new BlogRespDto();
-        List<BlogDocRespDto> blogDocRespDtoList = new ArrayList<>();
-        /*
-                resultMap
-                    status: 200
-                    headers
-                    body
-                        documents
-                            key
-                            value
-                        meta
-                            key
-                            value
-                */
-        HashMap<String, Object> metaMap = (HashMap<String, Object>) resultMap.getBody().get("meta");
+    public NaverBlogRespDto parsingNaverBlogResult (ResponseEntity<Map> resultMap) {
+        NaverBlogRespDto naverBlogRespDto = new NaverBlogRespDto();
+        List<NaverBlogDocRespDto> naverBlogDocRespDtoList = new ArrayList<>();
 
-        ArrayList<Map> documentsList = (ArrayList<Map>) resultMap.getBody().get("documents");
-        log.debug(documentsList.toString());
+        ArrayList<Map> itemsList = (ArrayList<Map>) resultMap.getBody().get("items");
 
-        for (Map document: documentsList) {
-            blogDocRespDtoList.add(BlogDocRespDto.builder()
-                    .title(document.get("title").toString())
-                    .contents(document.get("contents").toString())
-                    .url(document.get("url").toString())
-                    .blogname(document.get("blogname").toString())
-                    .thumbnail(document.get("thumbnail").toString())
-                    .datetime(LocalDateTime.parse(document.get("datetime").toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")))
+        // log.debug(itemsList.toString());
+
+        for (Map item: itemsList) {
+            naverBlogDocRespDtoList.add(NaverBlogDocRespDto.builder()
+                    .title(item.get("title").toString())
+                    .link(item.get("link").toString())
+                    .descriptions(item.get("description").toString())
+                    .bloggername(item.get("bloggername").toString())
+                    .bloggerlink(item.get("bloggerlink").toString())
+                    .postdate(item.get("postdate").toString())
                     .build()
             );
         }
 
-        blogRespDto = BlogRespDto.builder()
-                .totalCount((Integer) metaMap.get("total_count"))
-                .pageableCount((Integer) metaMap.get("pageable_count"))
-                .isEnd((Boolean) metaMap.get("is_end"))
-                .documents(blogDocRespDtoList)
+        naverBlogRespDto = NaverBlogRespDto.builder()
+                .lastBuildDate(resultMap.getBody().get("lastBuildDate").toString())
+                .total((Integer) resultMap.getBody().get("total"))
+                .start((Integer) resultMap.getBody().get("start"))
+                .display((Integer) resultMap.getBody().get("display"))
+                .items(naverBlogDocRespDtoList)
                 .build();
 
-        log.debug(blogRespDto.toString());
+        // log.debug(naverBlogRespDto.toString());
 
-        return blogRespDto;
+        return naverBlogRespDto;
     }
 }

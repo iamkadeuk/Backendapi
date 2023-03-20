@@ -23,7 +23,7 @@ public class KeywordServiceImpl implements KeywordService {
         List<UserKeywordEntity> userKeywordEntityList = userKeywordRepository.findFirst10ByOrderByCntDescLastChgDtmdDesc();
 
         if (userKeywordEntityList != null && userKeywordEntityList.size() > 0) {
-            for (UserKeywordEntity userKeywordEntity : userKeywordEntityList) {
+            for (UserKeywordEntity userKeywordEntity: userKeywordEntityList) {
                 popularKeywordDtoList.add(PopularKeywordDto.builder()
                         .keyword(userKeywordEntity.getKeyword())
                         .count(userKeywordEntity.getCnt())

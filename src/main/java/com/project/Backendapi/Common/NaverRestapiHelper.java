@@ -1,6 +1,5 @@
 package com.project.Backendapi.Common;
 
-
 import com.project.Backendapi.Dto.BlogParamDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,9 +38,7 @@ public class NaverRestapiHelper {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
 
-//        headers.add("Authorization", "KakaoAK " + restApiKey);
         headers.add("Accept", MediaType.ALL_VALUE);
-//        headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
         headers.add("X-Naver-Client-Id", clientId);
         headers.add("X-Naver-Client-Secret", clientSecret);
 
