@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "조회 API")
 @RestController
@@ -41,9 +43,10 @@ public class SearchingController {
 
         if (StringUtils.isNotBlank(query)) {
             BlogParamDto blogParamDto = BlogParamDto.builder().query(query).sort(sort).page(page).size(size).build();
-            BlogRespDto searchingResult = blogService.searchingBlogList(blogParamDto);
+            Map<String, Object> searchingResultMap = blogService.searchingBlogList(blogParamDto);
 
-            if (searchingResult != null) {
+            if (searchingResultMap.get(HttpStatus.OK.toString()) != null) {
+                BlogRespDto searchingResult = (BlogRespDto) searchingResultMap.get(HttpStatus.OK.toString());
                 return new ResponseEntity<>(searchingResult, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -29,7 +29,7 @@ public class KakaoRestapiHelper {
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8");
 
-        URI url = URI.create(API_SERVER_HOST+SEARCH_PLACE_KEYWORD_PATH + queryString);
+        URI url = URI.create(API_SERVER_HOST + SEARCH_PLACE_KEYWORD_PATH + queryString);
         RequestEntity<String> rq = new RequestEntity<>(headers, HttpMethod.GET, url);
         ResponseEntity<Map> re = restTemplate.exchange(rq, Map.class);
 
