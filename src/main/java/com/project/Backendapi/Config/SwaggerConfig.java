@@ -23,8 +23,8 @@ public class SwaggerConfig {
     private static final Contact DEFAULT_CONTACT = new Contact("허가득",
             "https://github.com/iamkadeuk", "iamkadeuk@icloud.com");
 
-    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("블로그 검색",
-            "블로그 검색", "1.0", "urn:tos", DEFAULT_CONTACT,
+    private static final ApiInfo DEFAULT_API_INFO = new ApiInfo("블로그 검색 서비스",
+            "블로그 검색 서비스", "1.0", "urn:tos", DEFAULT_CONTACT,
             "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0", new ArrayList<>());
 
     private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = new HashSet<>(

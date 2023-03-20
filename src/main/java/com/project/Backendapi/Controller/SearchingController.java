@@ -32,11 +32,6 @@ public class SearchingController {
     private KeywordService keywordService;
 
     @GetMapping(value = "/blog")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "블로그 검색 성공"),
-//            @ApiResponse(code = 400, message = "잘못된 요청(필수 파라미터 확인)"),
-//            @ApiResponse(code = 500, message = "서버 내부 오류")
-//    })
     public ResponseEntity<BlogRespDto> getBlogList (
             @ApiParam(value = "검색을 원하는 질의어(키워드)") @RequestParam(value = "query", required = true) String query,
             @ApiParam(value = "결과 문서 정렬 방식") @RequestParam(value = "sort", required = false, defaultValue = "accuracy") String sort,
