@@ -32,7 +32,6 @@ public class SearchingController {
             @Valid @RequestBody BlogParamDto blogParamDto
     ) {
         if (!ObjectUtils.isEmpty(blogParamDto)) {
-            //BlogParamDto blogParamDto = BlogParamDto.builder().query(query).sort(sort).page(page).size(size).build();
             Map<String, Map<String, Object>> resultMap = blogService.searchingBlogList(blogParamDto);
 
             if (resultMap.containsKey(HttpStatus.OK.toString())) {

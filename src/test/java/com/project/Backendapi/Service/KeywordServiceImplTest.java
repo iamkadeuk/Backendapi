@@ -1,7 +1,6 @@
-package com.project.Backendapi.Service.Impl;
+package com.project.Backendapi.Service;
 
 import com.project.Backendapi.Repository.UserKeywordRepository;
-import com.project.Backendapi.Service.KeywordService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class KeywordServiceTest {
+class KeywordServiceImplTest {
     @Mock
     private UserKeywordRepository userKeywordRepository;
     @InjectMocks
