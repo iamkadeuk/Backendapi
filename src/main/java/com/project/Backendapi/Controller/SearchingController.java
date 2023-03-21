@@ -10,11 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -28,28 +27,12 @@ public class SearchingController {
     @Autowired
     private KeywordService keywordService;
 
-    @GetMapping(value = "/blog")
+    @PostMapping(value = "/blog")
     public ResponseEntity<Map<String, Object>> getBlogList (
-            @ApiParam(value = "검색을 원하는 질의어(키워드)")
-            @RequestParam(value = "query", required = true)
-            String query,
-
-            @ApiParam(value = "결과 문서 정렬 방식: accuracy(정확도순) | recency(최신순)")
-            @RequestParam(value = "sort", required = false, defaultValue = "accuracy")
-            String sort,
-
-            @ApiParam(value = "결과 페이지 번호")
-            @RequestParam(value = "page", required = false, defaultValue = "1")
-            Integer page,
-
-            @ApiParam(value = "한 페이지에 보여질 문서 수")
-            @RequestParam(value = "size", required = false, defaultValue = "10")
-            Integer size
+            @Valid @RequestBody BlogParamDto blogParamDto
     ) {
-        if (StringUtils.isNotBlank(query)
-                && page >= 1 && page <= 50
-                && size >= 1 && size <= 50) {
-            BlogParamDto blogParamDto = BlogParamDto.builder().query(query).sort(sort).page(page).size(size).build();
+        if (!ObjectUtils.isEmpty(blogParamDto)) {
+            //BlogParamDto blogParamDto = BlogParamDto.builder().query(query).sort(sort).page(page).size(size).build();
             Map<String, Map<String, Object>> resultMap = blogService.searchingBlogList(blogParamDto);
 
             if (resultMap.containsKey(HttpStatus.OK.toString())) {
